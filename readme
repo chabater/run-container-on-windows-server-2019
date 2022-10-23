@@ -16,6 +16,8 @@ Install-Package -Name Docker -Source DockerDefault
 
 [Environment]::SetEnvironmentVariable("LCOW_SUPPORTED", "1", "Machine")
 
+[System.Environment]::SetEnvironmentVariable("LCOW_API_PLATFORM_IF_OMITTED", "linux",[System.EnvironmentVariableTarget]::Machine)
+
 Invoke-WebRequest -Uri "https://github.com/linuxkit/lcow/releases/download/v4.14.35-v0.3.9/release.zip" -UseBasicParsing -OutFile release.zip
 
 Expand-Archive release.zip -DestinationPath "$Env:ProgramFiles\Linux Containers."
