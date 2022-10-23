@@ -32,3 +32,14 @@ Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-L
 
 dockerd --register-service --experimental
 
+
+
+# mcr
+
+Invoke-WebRequest -Uri https://get.mirantis.com/install.ps1 -o install.ps1
+
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Force -Scope Process;
+
+.\install.ps1 -Offline
+
+
