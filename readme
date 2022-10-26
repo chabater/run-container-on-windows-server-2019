@@ -43,3 +43,49 @@ Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Force -Scope Process;
 .\install.ps1 -Offline
 
 
+
+download mode
+
+Expand-Archive .\Docker-18-09-14.zip -destinationpath $Env:Programfiles -Force
+
+$null = Install-WindowsFeature containers
+
+ $env:Path += ";$env:ProgramFiles\docker"
+
+ $newpath ="$env:ProgramFiles\docker;" +
+>> [Environment]::GetEnvironmentVariable("path",
+>> [EnvironmentVariableTarget]::Machine)
+
+[Environment]::SetEnvironmentVariable("PATH", $newPath,
+>> [EnvironmentVariableTarget]::Machine)
+
+dockerd --register-service
+
+ISM /Online /Enable-Feature /All /FeatureName:Microsoft-Hyper-V
+
+bcdedit /set hypervisorlaunchtype auto
+bcdedit /set hypervisorlaunchtype Auto
+
+Install-WindowsFeature -Name Hyper-V -IncludeManagementTools -Restart
+
+New-VM -Name WinContainerHost -MemoryStartupBytes 1GB
+
+Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All
+Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All
+
+Enable-WindowsOptionalFeature -Online -FeatureName containers -All
+Enable-WindowsOptionalFeature -Online -FeatureName containers -All
+
+Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux
+
+Enable-WindowsOptionalFeature -Online -FeatureName virtualmachineplatform
+
+Expand-Archive release.zip -DestinationPath "$Env:ProgramFiles\Linux Containers."
+
+[System.Environment]::SetEnvironmentVariable("LCOW_API_PLATFORM_IF_OMITTED", "linux",[System.EnvironmentVariableTarget]::Machine)
+
+ dockerd --register-service --experimental
+
+ Restart-service docker
+
+docker run --platform linux --name some-nginx -v /some/content:/usr/share/nginx/html:ro -d nginx
